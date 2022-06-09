@@ -1,7 +1,9 @@
+examples/
+packages/
+public/
 .DS_Store
 node_modules
 # /dist
-
 
 # local env files
 .env.local
@@ -21,3 +23,9 @@ pnpm-debug.log*
 *.njsproj
 *.sln
 *.sw?
+*.map
+
+yarn.lock
+
+vue.config.js
+babel.config.js
