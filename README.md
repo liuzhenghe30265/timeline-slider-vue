@@ -15,7 +15,7 @@ timeline-slider-vue
 
 ## 📦 Install
 
-```bash
+```
 npm install --save timeline-slider-vue
 ```
 
@@ -24,27 +24,21 @@ npm install --save timeline-slider-vue
 main.js
 
 ```js
-import DragTimelineVue from 'timeline-slider-vue'
+import TimelineSliderVue from 'timeline-slider-vue'
 import 'timeline-slider-vue/lib/timeline-slider-vue.css'
-Vue.use(DragTimelineVue)
+Vue.use(TimelineSliderVue)
 ```
 
 ## 🔧 Usage
 
 ```
-    <DragTimelineVue
-      :mask="true"
-      :date="date"
-      :mark-date="markDate"
-      :lock-date="lockDate"
-      @change="handleChange"
-      @input="handleInput">
+    <TimelineSliderVue>
       <div
         slot="sliderContent"
         slot-scope="scope">
-        {{scope.data}}
+        {{ scope.data }}
       </div>
-    </DragTimelineVue>
+    </TimelineSliderVue>
 ```
 
 [使用示例](https://github.com/liuzhenghe30265/timeline-slider-vue/blob/main/examples/App.vue)
@@ -52,7 +46,7 @@ Vue.use(DragTimelineVue)
 ```vue
 <template>
 	<div id="app">
-		<DragTimelineVue
+		<TimelineSliderVue
 			:date="date"
 			:mask="mask"
 			:mark-date="markDate"
@@ -63,7 +57,7 @@ Vue.use(DragTimelineVue)
 			<div slot="sliderContent" slot-scope="scope">
 				{{ scope.data }}
 			</div>
-		</DragTimelineVue>
+		</TimelineSliderVue>
 	</div>
 </template>
 
