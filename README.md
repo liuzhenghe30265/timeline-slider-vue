@@ -32,13 +32,13 @@ Vue.use(TimelineSliderVue)
 ## 🔧 Usage
 
 ```
-    <TimelineSliderVue>
+    <timeline-slider-vue>
       <div
         slot="sliderContent"
         slot-scope="scope">
         {{ scope.data }}
       </div>
-    </TimelineSliderVue>
+    </timeline-slider-vue>
 ```
 
 [使用示例](https://github.com/liuzhenghe30265/timeline-slider-vue/blob/main/examples/App.vue)
@@ -46,7 +46,7 @@ Vue.use(TimelineSliderVue)
 ```vue
 <template>
 	<div id="app">
-		<TimelineSliderVue
+		<timeline-slider-vue
 			:date="date"
 			:mask="mask"
 			:mark-date="markDate"
@@ -57,7 +57,7 @@ Vue.use(TimelineSliderVue)
 			<div slot="sliderContent" slot-scope="scope">
 				{{ scope.data }}
 			</div>
-		</TimelineSliderVue>
+		</timeline-slider-vue>
 	</div>
 </template>
 
@@ -73,10 +73,10 @@ export default {
 	},
 	methods: {
 		handleInput(value, date) {
-			console.log('........input', value, date)
+			console.log('input', value, date)
 		},
 		handleChange(value, date) {
-			console.log('........change', value, date)
+			console.log('change', value, date)
 		},
 	},
 }

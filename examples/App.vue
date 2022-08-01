@@ -1,7 +1,7 @@
 <template>
   <div
     id="app">
-    <TimelineSliderVue
+    <timeline-slider-vue
       :date="date"
       :mask="mask"
       :mark-date="markDate"
@@ -13,7 +13,7 @@
         slot-scope="scope">
         {{ scope.data }}
       </div>
-    </TimelineSliderVue>
+    </timeline-slider-vue>
     <div
       class="operation">
       <div>
