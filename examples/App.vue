@@ -2,10 +2,6 @@
   <div
     id="app">
     <timeline-slider-vue
-      :date="date"
-      :mask="mask"
-      :mark-date="markDate"
-      :lock-date="lockDate"
       @change="handleChange"
       @input="handleInput">
       <div
@@ -127,11 +123,11 @@ export default {
         this.date = dateFormat(new Date(), 'yyyy-MM-dd')
       }
     },
-    handleInput (value, date) {
-      console.log('........input', value, date)
+    handleInput (date, value) {
+      console.log('input', date, value)
     },
-    handleChange (value, date) {
-      console.log('........change', value, date)
+    handleChange (date, value) {
+      console.log('change', date, value)
     }
   }
 }

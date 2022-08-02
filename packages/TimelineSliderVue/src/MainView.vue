@@ -438,7 +438,7 @@ export default {
   flex-grow: 1;
   padding: 0 20px 0 40px;
   border-radius: 3px;
-  background-color: #e4e7ed;
+  background-image: linear-gradient(-90deg, #e4e7ed 1%, #409eff 100%), linear-gradient(#00f6ff, #00f6ff);
   &::before,
   &::after {
     display: table;
@@ -477,7 +477,7 @@ export default {
     vertical-align: middle;
     .timeline-slider-bar {
       border-radius: 3px;
-      background-color: #409eff;
+      background-image: linear-gradient(-90deg, #e4e7ed 1%, #409eff 100%), linear-gradient(#00f6ff, #00f6ff);
     }
     .timeline-days {
       z-index: 9;

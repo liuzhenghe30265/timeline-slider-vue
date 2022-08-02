@@ -1,6 +1,6 @@
 {
   "name": "timeline-slider-vue",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "private": false,
   "main": "lib/timeline-slider-vue.common.js",
   "scripts": {

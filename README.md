@@ -32,7 +32,9 @@ Vue.use(TimelineSliderVue)
 ## 🔧 Usage
 
 ```
-    <timeline-slider-vue>
+    <timeline-slider-vue
+      @change="handleChange"
+      @input="handleInput">
       <div
         slot="sliderContent"
         slot-scope="scope">
@@ -72,11 +74,11 @@ export default {
 		}
 	},
 	methods: {
-		handleInput(value, date) {
-			console.log('input', value, date)
+		handleInput(date, value) {
+			console.log('input', date, value)
 		},
-		handleChange(value, date) {
-			console.log('change', value, date)
+		handleChange(date, value) {
+			console.log('change', date, value)
 		},
 	},
 }
@@ -87,7 +89,7 @@ export default {
 
 | **参数**  | **类型** | **默认值** | **说明**                                                                                                                              |
 | :-------- | :------: | :--------- | :------------------------------------------------------------------------------------------------------------------------------------ |
-| date      |  String  | ''         | yyyy-MM-dd 格式的日期，根据传入的日期，设置滑块的位置                                                                                 |
+| date      |  String  | 当日       | yyyy-MM-dd 格式的日期，根据传入的日期，设置滑块的位置                                                                                 |
 | mask      | Boolean  | true       | 拖动过程中是否显示遮罩层                                                                                                              |
 | mark-date |  Array   | []         | 一些特殊日期标注，例如 ['2022-03-08', '2022-06-18', '2022-11-11']                                                                     |
 | lock-date |  Array   | []         | 锁定的日期，只能在指定日期下切换，当滑块拖动到其他位置，自动跳到离指定日期最近的日期处例如 ['2022-03-08', '2022-06-18', '2022-11-11'] |

@@ -97,18 +97,6 @@ export default {
   },
 
   methods: {
-    // 设置标记日期
-    setMarksDate (list) {
-      list.forEach(mark => {
-        if (this.datePoint.findIndex(item => item.date === mark)) {
-          const index = this.datePoint.findIndex(item => item.date === mark)
-          if (index > -1) {
-            this.datePoint[index].mark = true
-          }
-        }
-      })
-      console.log('...........this.datePoint', this.datePoint)
-    },
     // 获取年月日
     getYearMonthDay (date) {
       // 兼容 ios 设备（ios 不支持短横线格式的日期）
@@ -161,9 +149,6 @@ export default {
       this.max = numberOfDays(year)
       this.setCalendarAndPosition(year, this.markDate)
     },
-    handleClick () {
-      this.sliderTo('2020-02-29')
-    },
     /**
      * 判断某个日期是否有可能存在于一个日期列表中
      * dateIsExistList ('2018-01-01', ['2018-05-06', '2018-07-08']) // true
@@ -207,10 +192,10 @@ export default {
     },
     handleInput (val) {
       this.dateValue = this.getDateByIndexOfYear(val)
-      this.$emit('input', val, this.dateValue)
+      this.$emit('input', this.dateValue, val)
     },
     handleChange (val) {
-      this.$emit('change', val, this.dateValue)
+      this.$emit('change', this.dateValue, val)
       if (this.lock) {
         const nearlyDate = this.judjeMoreNearly(this.dateValue, this.lockDate)
         this.sliderTo(nearlyDate)
