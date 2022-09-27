@@ -52,6 +52,16 @@ export default {
       type: Boolean,
       default: true
     },
+    // 播放
+    play: {
+      type: Boolean,
+      default: false
+    },
+    // 播放速度
+    playSpeed: {
+      type: Number,
+      default: 1000
+    },
     // 传递过来的日期
     date: {
       type: String,
@@ -60,6 +70,7 @@ export default {
   },
   data () {
     return {
+      playTimer: null,
       lock: false, // 滑块只能在指定日期下跳转
       dateValue: '', // 通过 index 计算的日期
       datePoint: [], // 一年中所有日期及所在的位置
@@ -71,7 +82,15 @@ export default {
 
   },
   watch: {
+    play (val) {
+      if (val) {
+        this.playTimerFun()
+      } else {
+        this.clearPlayTimerFun()
+      }
+    },
     lockDate (list) {
+      this.clearPlayTimerFun()
       if (list && list.length > 0) {
         this.lock = true
         // 自动跳到离当前日期最近的锁定的日期处
@@ -82,9 +101,11 @@ export default {
       }
     },
     markDate (list) {
+      this.clearPlayTimerFun()
       this.setCalendarAndPosition(this.getYearMonthDay(this.date).year, list)
     },
     date (val) {
+      this.clearPlayTimerFun()
       this.sliderTo(val)
     }
   },
@@ -97,6 +118,21 @@ export default {
   },
 
   methods: {
+    clearPlayTimerFun () {
+      if (this.playTimer) {
+        clearInterval(this.playTimer)
+      }
+    },
+    playTimerFun () {
+      this.clearPlayTimerFun()
+      this.playTimer = setInterval(() => {
+        this.value += 1
+        if (this.value > this.max) {
+          this.clearPlayTimerFun()
+          return
+        }
+      }, this.playSpeed)
+    },
     // 获取年月日
     getYearMonthDay (date) {
       // 兼容 ios 设备（ios 不支持短横线格式的日期）
@@ -209,6 +245,7 @@ export default {
 .timeline-container {
   user-select: none;
   padding: 80px 20px;
+  font-size: 16px;
   .main-view {
     flex-grow: 1;
     .slider-content {

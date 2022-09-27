@@ -2,6 +2,12 @@
   <div
     id="app">
     <timeline-slider-vue
+      :date="date"
+      :mask="mask"
+      :mark-date="markDate"
+      :lock-date="lockDate"
+      :play="play"
+      :play-speed="playSpeed"
       @change="handleChange"
       @input="handleInput">
       <div
@@ -12,6 +18,13 @@
     </timeline-slider-vue>
     <div
       class="operation">
+      <div>
+        <el-button
+          type="primary"
+          @click="handlePlay">
+          {{ play ? '暂停' : '播放' }}
+        </el-button>
+      </div>
       <div>
         <el-button
           type="success"
@@ -56,14 +69,13 @@ export default {
   components: {},
   data () {
     return {
+      playSpeed: 1000, // 播放速度
+      play: false, // 自动播放
       lockFlag: false,
       markFlag: false,
       lockDate: [], // 锁定的日期（滑动结束时自动跳到指定的日期）
       markDate: [], // 做标记的日期
       pickerOptions: {
-        // disabledDate (time) {
-        //   return time.getTime() > Date.now();
-        // },
         shortcuts: [{
           text: '今天',
           onClick (picker) {
@@ -96,6 +108,9 @@ export default {
   mounted () {
   },
   methods: {
+    handlePlay () {
+      this.play = !this.play
+    },
     handleLock () {
       this.lockFlag = !this.lockFlag
       if (this.lockFlag) {

@@ -1,4 +1,4 @@
-# 带拖动功能的时间轴
+# 带拖动和播放功能的时间轴
 
 timeline-slider-vue
 
@@ -33,6 +33,12 @@ Vue.use(TimelineSliderVue)
 
 ```
     <timeline-slider-vue
+      :date="date"
+      :mask="mask"
+      :mark-date="markDate"
+      :lock-date="lockDate"
+      :play="play"
+      :play-speed="playSpeed"
       @change="handleChange"
       @input="handleInput">
       <div
@@ -53,6 +59,8 @@ Vue.use(TimelineSliderVue)
 			:mask="mask"
 			:mark-date="markDate"
 			:lock-date="lockDate"
+			:play="play"
+			:play-speed="playSpeed"
 			@change="handleChange"
 			@input="handleInput"
 		>
@@ -67,6 +75,10 @@ Vue.use(TimelineSliderVue)
 export default {
 	data() {
 		return {
+			playSpeed: 1000, // 播放速度
+			play: false, // 自动播放
+			lockFlag: false,
+			markFlag: false,
 			lockDate: [], // 锁定的日期（滑动结束时自动跳到指定的日期）
 			markDate: [], // 做标记的日期
 			mask: true,
@@ -93,6 +105,8 @@ export default {
 | mask      | Boolean  | true       | 拖动过程中是否显示遮罩层                                                                                                              |
 | mark-date |  Array   | []         | 一些特殊日期标注，例如 ['2022-03-08', '2022-06-18', '2022-11-11']                                                                     |
 | lock-date |  Array   | []         | 锁定的日期，只能在指定日期下切换，当滑块拖动到其他位置，自动跳到离指定日期最近的日期处例如 ['2022-03-08', '2022-06-18', '2022-11-11'] |
+| play      | Boolean  | false      | 播放                                                                                                                                  |
+| playSpeed |  Number  | 1000       | 播放速度，同 setInterval milliseconds 参数                                                                                            |
 
 ## slot
 
