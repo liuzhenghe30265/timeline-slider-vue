@@ -2,7 +2,7 @@
 
 timeline-slider-vue
 
-![](https://tva1.sinaimg.cn/large/e6c9d24ely1h30killxsuj21ks08qq3m.jpg)
+![](./pic.jpg)
 
 [Demo](https://liuzhenghe30265.github.io/timeline-slider-vue/)
 
@@ -15,11 +15,11 @@ timeline-slider-vue
 
 ## 📦 Install
 
-```
+```bash
 npm install --save timeline-slider-vue
 ```
 
-### 全局引用
+## 🔧 Usage
 
 main.js
 
@@ -27,12 +27,9 @@ main.js
 import TimelineSliderVue from 'timeline-slider-vue'
 import 'timeline-slider-vue/lib/timeline-slider-vue.css'
 Vue.use(TimelineSliderVue)
-```
 
-## 🔧 Usage
-
-```
-    <timeline-slider-vue
+```vue
+    <TimelineSliderVue
       :date="date"
       :mask="mask"
       :mark-date="markDate"
@@ -46,7 +43,7 @@ Vue.use(TimelineSliderVue)
         slot-scope="scope">
         {{ scope.data }}
       </div>
-    </timeline-slider-vue>
+    </TimelineSliderVue>
 ```
 
 [使用示例](https://github.com/liuzhenghe30265/timeline-slider-vue/blob/main/examples/App.vue)
@@ -54,7 +51,7 @@ Vue.use(TimelineSliderVue)
 ```vue
 <template>
 	<div id="app">
-		<timeline-slider-vue
+		<TimelineSliderVue
 			:date="date"
 			:mask="mask"
 			:mark-date="markDate"
@@ -67,7 +64,7 @@ Vue.use(TimelineSliderVue)
 			<div slot="sliderContent" slot-scope="scope">
 				{{ scope.data }}
 			</div>
-		</timeline-slider-vue>
+		</TimelineSliderVue>
 	</div>
 </template>
 
@@ -97,10 +94,31 @@ export default {
 </script>
 ```
 
+### 竖向模式
+
+```vue
+    <TimelineSliderVue
+      vertical
+      height="240px"
+      :max-value="100"
+      :min-value="0"
+      :init-value="40"
+      @change="handleChange"
+      @input="handleInput"
+    >
+      <div slot="sliderContent" slot-scope="scope">
+        <div>{{ scope.value }}</div>
+      </div>
+    </TimelineSliderVue>
+```
+
 ## Available props
 
 | **参数**  | **类型** | **默认值** | **说明**                                                                                                                              |
 | :-------- | :------: | :--------- | :------------------------------------------------------------------------------------------------------------------------------------ |
+| initValue |  Number  | 0          | v-model 绑定的初始值（仅在 vertical = true 时生效）                                                                                   |
+| minValue  |  Number  | 0          | 最小值（仅在 vertical = true 时生效）                                                                                                 |
+| maxValue  |  Number  | 100        | 最大值（仅在 vertical = true 时生效）                                                                                                 |
 | date      |  String  | 当日       | yyyy-MM-dd 格式的日期，根据传入的日期，设置滑块的位置                                                                                 |
 | mask      | Boolean  | true       | 拖动过程中是否显示遮罩层                                                                                                              |
 | mark-date |  Array   | []         | 一些特殊日期标注，例如 ['2022-03-08', '2022-06-18', '2022-11-11']                                                                     |

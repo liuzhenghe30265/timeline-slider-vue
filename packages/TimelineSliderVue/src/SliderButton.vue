@@ -1,22 +1,10 @@
 <template>
-  <div
-    ref="button"
-    class="slider-button-wrapper"
-    :class="{ 'hover': hovering, 'dragging': dragging }"
-    :style="wrapperStyle"
-    tabindex="0"
-    @mouseenter="handleMouseEnter"
-    @mouseleave="handleMouseLeave"
-    @mousedown="onButtonDown"
-    @touchstart="onButtonDown"
-    @focus="handleMouseEnter"
-    @blur="handleMouseLeave"
-    @keydown.left="onLeftKeyDown"
-    @keydown.right="onRightKeyDown"
-    @keydown.down.prevent="onLeftKeyDown"
+  <div ref="button" class="slider-button-wrapper" :class="{ 'hover': hovering, 'dragging': dragging }"
+    :style="wrapperStyle" tabindex="0" @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave"
+    @mousedown="onButtonDown" @touchstart="onButtonDown" @focus="handleMouseEnter" @blur="handleMouseLeave"
+    @keydown.left="onLeftKeyDown" @keydown.right="onRightKeyDown" @keydown.down.prevent="onLeftKeyDown"
     @keydown.up.prevent="onRightKeyDown">
-    <slot
-      name="sliderContent" />
+    <slot name="sliderContent" />
   </div>
 </template>
 
@@ -44,7 +32,7 @@ export default {
     }
   },
 
-  data () {
+  data() {
     return {
       hovering: false,
       dragging: false,
@@ -60,73 +48,73 @@ export default {
   },
 
   computed: {
-    disabled () {
+    disabled() {
       return this.$parent.sliderDisabled
     },
 
-    max () {
+    max() {
       return this.$parent.max
     },
 
-    min () {
+    min() {
       return this.$parent.min
     },
 
-    step () {
+    step() {
       return this.$parent.step
     },
 
-    showTooltip () {
+    showTooltip() {
       return this.$parent.showTooltip
     },
 
-    precision () {
+    precision() {
       return this.$parent.precision
     },
 
-    currentPosition () {
+    currentPosition() {
       return `${(this.value - this.min) / (this.max - this.min) * 100}%`
     },
 
-    enableFormat () {
+    enableFormat() {
       return this.$parent.formatTooltip instanceof Function
     },
 
-    formatValue () {
+    formatValue() {
       return this.enableFormat && this.$parent.formatTooltip(this.value) || this.value
     },
 
-    wrapperStyle () {
+    wrapperStyle() {
       return this.vertical ? { bottom: this.currentPosition } : { left: this.currentPosition }
     }
   },
 
   watch: {
-    dragging (val) {
+    dragging(val) {
       this.$parent.dragging = val
     }
   },
 
   methods: {
-    displayTooltip () {
+    displayTooltip() {
       this.$refs.tooltip && (this.$refs.tooltip.showPopper = true)
     },
 
-    hideTooltip () {
+    hideTooltip() {
       this.$refs.tooltip && (this.$refs.tooltip.showPopper = false)
     },
 
-    handleMouseEnter () {
+    handleMouseEnter() {
       this.hovering = true
       this.displayTooltip()
     },
 
-    handleMouseLeave () {
+    handleMouseLeave() {
       this.hovering = false
       this.hideTooltip()
     },
 
-    onButtonDown (event) {
+    onButtonDown(event) {
       if (this.disabled) return
       // event.preventDefault()
       this.onDragStart(event)
@@ -136,19 +124,19 @@ export default {
       window.addEventListener('touchend', this.onDragEnd)
       window.addEventListener('contextmenu', this.onDragEnd)
     },
-    onLeftKeyDown () {
+    onLeftKeyDown() {
       if (this.disabled) return
       this.newPosition = parseFloat(this.currentPosition) - this.step / (this.max - this.min) * 100
       this.setPosition(this.newPosition)
       this.$parent.emitChange()
     },
-    onRightKeyDown () {
+    onRightKeyDown() {
       if (this.disabled) return
       this.newPosition = parseFloat(this.currentPosition) + this.step / (this.max - this.min) * 100
       this.setPosition(this.newPosition)
       this.$parent.emitChange()
     },
-    onDragStart (event) {
+    onDragStart(event) {
       this.dragging = true
       this.isClick = true
       if (event.type === 'touchstart') {
@@ -164,7 +152,7 @@ export default {
       this.newPosition = this.startPosition
     },
 
-    onDragging (event) {
+    onDragging(event) {
       if (this.dragging) {
         this.$parent.dragStatus = true
         this.isClick = false
@@ -187,7 +175,7 @@ export default {
       }
     },
 
-    onDragEnd () {
+    onDragEnd() {
       if (this.dragging) {
         /*
          * 防止在 mouseup 后立即触发 click，导致滑块有几率产生一小段位移
@@ -210,7 +198,7 @@ export default {
       }
     },
 
-    setPosition (newPosition) {
+    setPosition(newPosition) {
       if (newPosition === null || isNaN(newPosition)) return
       if (newPosition < 0) {
         newPosition = 0
@@ -240,16 +228,19 @@ export default {
   position: absolute;
   z-index: 1001;
   bottom: 12px;
+  left: 50%;
   width: max-content;
   user-select: none;
   transform: translateX(-50%);
   text-align: center;
   outline: none;
   background-color: transparent;
+
   &:hover,
   &.hover {
     cursor: grab;
   }
+
   &.dragging {
     cursor: grabbing;
   }

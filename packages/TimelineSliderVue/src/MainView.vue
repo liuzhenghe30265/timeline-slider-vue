@@ -1,49 +1,21 @@
 <template>
-  <div
-    class="timeline-slider"
-    role="slider"
-    :aria-valuemin="min"
-    :aria-valuemax="max"
-    :aria-disabled="sliderDisabled"
-    :class="{move: dragStatus && mask}">
-    <div
-      ref="slider"
-      class="timeline-runway"
-      :class="{'disabled': sliderDisabled }"
-      :style="runwayStyle"
+  <div class="timeline-slider" role="slider" :aria-valuemin="min" :aria-valuemax="max" :aria-disabled="sliderDisabled"
+    :class="{ 'is-vertical': vertical, move: dragStatus && mask }">
+    <div ref="slider" class="timeline-runway" :class="{ 'disabled': sliderDisabled }" :style="runwayStyle"
       @click="onSliderClick">
-      <div
-        class="timeline-slider-bar"
-        :style="barStyle" />
-      <slider-button
-        ref="button1"
-        v-model="firstValue"
-        :tooltip-class="tooltipClass">
-        <div
-          slot="sliderContent">
-          <slot
-            name="sliderContent" />
+      <div class="timeline-slider-bar" :style="barStyle" />
+      <SliderButton ref="button1" v-model="firstValue" :tooltip-class="tooltipClass" :vertical="vertical">
+        <div slot="sliderContent">
+          <slot name="sliderContent" />
         </div>
-      </slider-button>
-      <div
-        class="timeline-days">
-        <div
-          v-for="(item, index) of datePoint"
-          :key="index"
-          class="day-item"
-          :style="{left: item.position + '%'}">
-          <div
-            class="label-text">
-            <span
-              v-if="item.label"
-              :title="item.date"
-              class="month-value"
-              @click.stop="handleTimeItemClick(item)">{{ item.label }}</span>
-            <span
-              v-if="item.mark"
-              :title="item.date"
-              class="mark-value"
-              @click.stop="handleTimeItemClick(item)">{{ item.label }}</span>
+      </SliderButton>
+      <div class="timeline-days" v-if="!vertical">
+        <div v-for="(item, index) of datePoint" :key="index" class="day-item" :style="{ left: item.position + '%' }">
+          <div class="label-text">
+            <span v-if="item.label" :title="item.date" class="month-value" @click.stop="handleTimeItemClick(item)">{{
+              item.label }}</span>
+            <span v-if="item.mark" :title="item.date" class="mark-value" @click.stop="handleTimeItemClick(item)">{{
+              item.label }}</span>
           </div>
         </div>
       </div>
@@ -77,7 +49,7 @@ export default {
     },
     datePoint: {
       type: [Array],
-      default () {
+      default() {
         return []
       }
     },
@@ -147,13 +119,13 @@ export default {
     },
     marks: {
       type: Object,
-      default () {
+      default() {
         return {}
       }
     }
   },
 
-  data () {
+  data() {
     return {
       firstValue: null,
       secondValue: null,
@@ -165,7 +137,7 @@ export default {
   },
 
   computed: {
-    stops () {
+    stops() {
       if (!this.showStops || this.min > this.max) return []
       if (this.step === 0) {
         process.env.NODE_ENV !== 'production' &&
@@ -188,7 +160,7 @@ export default {
       }
     },
 
-    datePointList () {
+    datePointList() {
       if (!this.datePoint) {
         return []
       }
@@ -196,7 +168,7 @@ export default {
       return []
     },
 
-    markList () {
+    markList() {
       if (!this.marks) {
         return []
       }
@@ -212,27 +184,27 @@ export default {
         }))
     },
 
-    minValue () {
+    minValue() {
       return Math.min(this.firstValue, this.secondValue)
     },
 
-    maxValue () {
+    maxValue() {
       return Math.max(this.firstValue, this.secondValue)
     },
 
-    barSize () {
+    barSize() {
       return this.range
         ? `${100 * (this.maxValue - this.minValue) / (this.max - this.min)}%`
         : `${100 * (this.firstValue - this.min) / (this.max - this.min)}%`
     },
 
-    barStart () {
+    barStart() {
       return this.range
         ? `${100 * (this.minValue - this.min) / (this.max - this.min)}%`
         : '0%'
     },
 
-    precision () {
+    precision() {
       const precisions = [this.min, this.max, this.step].map(item => {
         const decimal = ('' + item).split('.')[1]
         return decimal ? decimal.length : 0
@@ -240,11 +212,11 @@ export default {
       return Math.max.apply(null, precisions)
     },
 
-    runwayStyle () {
+    runwayStyle() {
       return this.vertical ? { height: this.height } : {}
     },
 
-    barStyle () {
+    barStyle() {
       return this.vertical
         ? {
           height: this.barSize,
@@ -255,13 +227,13 @@ export default {
         }
     },
 
-    sliderDisabled () {
+    sliderDisabled() {
       return this.disabled || (this.elForm || {}).disabled
     }
   },
 
   watch: {
-    value (val, oldVal) {
+    value(val, oldVal) {
       if (this.dragging ||
         Array.isArray(val) &&
         Array.isArray(oldVal) &&
@@ -271,13 +243,13 @@ export default {
       this.setValues()
     },
 
-    dragging (val) {
+    dragging(val) {
       if (!val) {
         this.setValues()
       }
     },
 
-    firstValue (val) {
+    firstValue(val) {
       if (this.range) {
         this.$emit('input', [this.minValue, this.maxValue])
       } else {
@@ -285,22 +257,22 @@ export default {
       }
     },
 
-    secondValue () {
+    secondValue() {
       if (this.range) {
         this.$emit('input', [this.minValue, this.maxValue])
       }
     },
 
-    min () {
+    min() {
       this.setValues()
     },
 
-    max () {
+    max() {
       this.setValues()
     }
   },
 
-  mounted () {
+  mounted() {
     let valuetext
     if (this.range) {
       if (Array.isArray(this.value)) {
@@ -330,16 +302,16 @@ export default {
     window.addEventListener('resize', this.resetSize)
   },
 
-  beforeDestroy () {
+  beforeDestroy() {
     window.removeEventListener('resize', this.resetSize)
   },
 
   methods: {
-    handleTimeItemClick (date) {
+    handleTimeItemClick(date) {
       this.firstValue = date.index
       this.emitChange()
     },
-    valueChanged () {
+    valueChanged() {
       if (this.range) {
         return ![this.minValue, this.maxValue]
           .every((item, index) => item === this.oldValue[index])
@@ -347,7 +319,7 @@ export default {
         return this.value !== this.oldValue
       }
     },
-    setValues () {
+    setValues() {
       if (this.min > this.max) {
         console.error('[Element Error][Slider]min should not be greater than max.')
         return
@@ -385,7 +357,7 @@ export default {
       }
     },
 
-    setPosition (percent) {
+    setPosition(percent) {
       const targetValue = this.min + percent * (this.max - this.min) / 100
       if (!this.range) {
         this.$refs.button1.setPosition(percent)
@@ -400,7 +372,7 @@ export default {
       this.$refs[button].setPosition(percent)
     },
 
-    onSliderClick (event) {
+    onSliderClick(event) {
       if (this.sliderDisabled || this.dragging) return
       this.resetSize()
       if (this.vertical) {
@@ -413,19 +385,19 @@ export default {
       this.emitChange()
     },
 
-    resetSize () {
+    resetSize() {
       if (this.$refs.slider) {
         this.sliderSize = this.$refs.slider[`client${this.vertical ? 'Height' : 'Width'}`]
       }
     },
 
-    emitChange () {
+    emitChange() {
       this.$nextTick(() => {
         this.$emit('change', this.range ? [this.minValue, this.maxValue] : this.value)
       })
     },
 
-    getStopStyle (position) {
+    getStopStyle(position) {
       return this.vertical ? { 'bottom': position + '%' } : { 'left': position + '%' }
     }
   }
@@ -441,12 +413,14 @@ export default {
   // background-image: linear-gradient(-90deg, #e4e7ed 1%, #409eff 100%),
   //   linear-gradient(#00f6ff, #00f6ff);
   background-color: #e4e7ed;
+
   &::before,
   &::after {
     display: table;
     clear: both;
     content: '';
   }
+
   &::before {
     position: fixed;
     top: 0;
@@ -461,15 +435,18 @@ export default {
     opacity: 0;
     background: rgba(0, 0, 0, 0.3);
   }
+
   &.move {
     &::before {
       opacity: 1;
       visibility: visible;
     }
+
     .slider-content {
       pointer-events: none;
     }
   }
+
   .timeline-runway {
     position: relative;
     display: flex;
@@ -477,17 +454,21 @@ export default {
     height: 4px;
     cursor: pointer;
     vertical-align: middle;
+
     .timeline-slider-bar {
       border-radius: 3px;
       // background-image: linear-gradient(-90deg, #e4e7ed 1%, #409eff 100%), linear-gradient(#00f6ff, #00f6ff);
       background-color: #409eff;
     }
+
     .timeline-days {
       z-index: 9;
       display: flex;
+
       .day-item {
         position: absolute;
         left: 0;
+
         .label-text {
           span {
             position: absolute;
@@ -496,6 +477,7 @@ export default {
             width: max-content;
             transition: all 0.2s;
             transform: translateX(-50%);
+
             &::before {
               position: absolute;
               top: -23px;
@@ -507,11 +489,13 @@ export default {
               border-radius: 50%;
               background-color: #409eff;
             }
+
             &.month-value {
               &::before {
                 background-color: #409eff;
               }
             }
+
             &.mark-value {
               &::before {
                 background-color: #67c23a;
@@ -521,18 +505,51 @@ export default {
         }
       }
     }
+
     &.disabled {
       cursor: default;
     }
   }
+
+  &.is-vertical {
+    position: relative;
+    background-image: initial;
+    background-color: initial;
+    padding: 0;
+
+    ::v-deep {
+      .timeline-runway {
+        display: block;
+        width: 10px;
+        background-color: #E4E7ED;
+
+        .timeline-slider-bar {
+          position: absolute;
+          width: 100%;
+          border-radius: 0;
+        }
+      }
+
+      .slider-content {
+        width: auto;
+
+        &::before {
+          display: none;
+        }
+      }
+    }
+  }
 }
+
 @keyframes signAnimate {
   0% {
     opacity: 0;
   }
+
   50% {
     opacity: 1;
   }
+
   100% {
     opacity: 0;
   }

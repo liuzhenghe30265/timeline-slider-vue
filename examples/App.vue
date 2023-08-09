@@ -1,7 +1,6 @@
 <template>
-  <div
-    id="app">
-    <timeline-slider-vue
+  <div id="app">
+    <TimelineSliderVue
       :date="date"
       :mask="mask"
       :mark-date="markDate"
@@ -9,46 +8,31 @@
       :play="play"
       :play-speed="playSpeed"
       @change="handleChange"
-      @input="handleInput">
-      <div
-        slot="sliderContent"
-        slot-scope="scope">
+      @input="handleInput"
+    >
+      <div slot="sliderContent" slot-scope="scope">
         {{ scope.data }}
       </div>
-    </timeline-slider-vue>
-    <div
-      class="operation">
+    </TimelineSliderVue>
+    <div class="operation">
       <div>
-        <el-button
-          type="primary"
-          @click="handlePlay">
+        <el-button type="primary" @click="handlePlay">
           {{ play ? '暂停' : '播放' }}
         </el-button>
       </div>
       <div>
-        <el-button
-          type="success"
-          @click="handleMark">
+        <el-button type="success" @click="handleMark">
           标记日期
         </el-button>
       </div>
       <div>
-        <el-date-picker
-          v-model="datePickerValue"
-          align="right"
-          type="date"
-          placeholder="选择日期"
-          :picker-options="pickerOptions"
-          format="yyyy 年 MM 月 dd 日"
-          value-format="yyyy-MM-dd"
+        <el-date-picker v-model="datePickerValue" align="right" type="date" placeholder="选择日期"
+          :picker-options="pickerOptions" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd"
           @change="handleDatePickerChange" />
       </div>
-      <div
-        style="width:240px;">
+      <div style="width:240px;">
         <div>
-          <el-button
-            :type="lockFlag ? 'success' : 'primary'"
-            @click="handleLock">
+          <el-button :type="lockFlag ? 'success' : 'primary'" @click="handleLock">
             {{ lockFlag ? '日期解锁' : '日期锁定' }}
           </el-button>
         </div>
@@ -57,6 +41,20 @@
         </div>
       </div>
     </div>
+    <hr>
+    <TimelineSliderVue
+      vertical
+      height="240px"
+      :max-value="100"
+      :min-value="0"
+      :init-value="40"
+      @change="handleChange"
+      @input="handleInput"
+    >
+      <div slot="sliderContent" slot-scope="scope">
+        <div>{{ scope.value }}</div>
+      </div>
+    </TimelineSliderVue>
   </div>
 </template>
 
@@ -67,7 +65,7 @@ import {
 export default {
   name: 'App',
   components: {},
-  data () {
+  data() {
     return {
       playSpeed: 1000, // 播放速度
       play: false, // 自动播放
@@ -78,19 +76,19 @@ export default {
       pickerOptions: {
         shortcuts: [{
           text: '今天',
-          onClick (picker) {
+          onClick(picker) {
             picker.$emit('pick', new Date())
           }
         }, {
           text: '昨天',
-          onClick (picker) {
+          onClick(picker) {
             const date = new Date()
             date.setTime(date.getTime() - 3600 * 1000 * 24)
             picker.$emit('pick', date)
           }
         }, {
           text: '一周前',
-          onClick (picker) {
+          onClick(picker) {
             const date = new Date()
             date.setTime(date.getTime() - 3600 * 1000 * 24 * 7)
             picker.$emit('pick', date)
@@ -105,13 +103,13 @@ export default {
   computed: {
 
   },
-  mounted () {
+  mounted() {
   },
   methods: {
-    handlePlay () {
+    handlePlay() {
       this.play = !this.play
     },
-    handleLock () {
+    handleLock() {
       this.lockFlag = !this.lockFlag
       if (this.lockFlag) {
         this.lockDate = ['2022-03-08', '2022-06-18', '2022-11-11']
@@ -121,7 +119,7 @@ export default {
         this.markDate = []
       }
     },
-    handleMark () {
+    handleMark() {
       this.markFlag = !this.markFlag
       if (this.markFlag) {
         this.markDate = ['2022-03-08', '2022-06-18', '2022-11-11']
@@ -131,17 +129,17 @@ export default {
         this.lockFlag = false
       }
     },
-    handleDatePickerChange (val) {
+    handleDatePickerChange(val) {
       if (val) {
         this.date = val
       } else {
         this.date = dateFormat(new Date(), 'yyyy-MM-dd')
       }
     },
-    handleInput (date, value) {
+    handleInput(date, value) {
       console.log('input', date, value)
     },
-    handleChange (date, value) {
+    handleChange(date, value) {
       console.log('change', date, value)
     }
   }
