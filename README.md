@@ -2,7 +2,7 @@
 
 timeline-slider-vue
 
-![](./pic.jpg)
+![](https://p.ipic.vip/6zzfj0.jpg)
 
 [Demo](https://liuzhenghe30265.github.io/timeline-slider-vue/)
 
