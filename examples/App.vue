@@ -10,29 +10,48 @@
       @change="handleChange"
       @input="handleInput"
     >
-      <div slot="sliderContent" slot-scope="scope">
+      <div
+        slot="sliderContent"
+        slot-scope="scope"
+      >
         {{ scope.data }}
       </div>
     </TimelineSliderVue>
     <div class="operation">
       <div>
-        <el-button type="primary" @click="handlePlay">
+        <el-button
+          type="primary"
+          @click="handlePlay"
+        >
           {{ play ? '暂停' : '播放' }}
         </el-button>
       </div>
       <div>
-        <el-button type="success" @click="handleMark">
+        <el-button
+          type="success"
+          @click="handleMark"
+        >
           标记日期
         </el-button>
       </div>
       <div>
-        <el-date-picker v-model="datePickerValue" align="right" type="date" placeholder="选择日期"
-          :picker-options="pickerOptions" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd"
-          @change="handleDatePickerChange" />
+        <el-date-picker
+          v-model="datePickerValue"
+          align="right"
+          type="date"
+          placeholder="选择日期"
+          :picker-options="pickerOptions"
+          format="yyyy 年 MM 月 dd 日"
+          value-format="yyyy-MM-dd"
+          @change="handleDatePickerChange"
+        />
       </div>
       <div style="width:240px;">
         <div>
-          <el-button :type="lockFlag ? 'success' : 'primary'" @click="handleLock">
+          <el-button
+            :type="lockFlag ? 'success' : 'primary'"
+            @click="handleLock"
+          >
             {{ lockFlag ? '日期解锁' : '日期锁定' }}
           </el-button>
         </div>
@@ -51,7 +70,10 @@
       @change="handleChange"
       @input="handleInput"
     >
-      <div slot="sliderContent" slot-scope="scope">
+      <div
+        slot="sliderContent"
+        slot-scope="scope"
+      >
         <div>{{ scope.value }}</div>
       </div>
     </TimelineSliderVue>
@@ -59,9 +81,7 @@
 </template>
 
 <script>
-import {
-  dateFormat
-} from '../packages/TimelineSliderVue/src/utils.js'
+import { dateFormat } from '../packages/TimelineSliderVue/src/utils.js'
 export default {
   name: 'App',
   components: {},
@@ -74,37 +94,38 @@ export default {
       lockDate: [], // 锁定的日期（滑动结束时自动跳到指定的日期）
       markDate: [], // 做标记的日期
       pickerOptions: {
-        shortcuts: [{
-          text: '今天',
-          onClick(picker) {
-            picker.$emit('pick', new Date())
+        shortcuts: [
+          {
+            text: '今天',
+            onClick(picker) {
+              picker.$emit('pick', new Date())
+            }
+          },
+          {
+            text: '昨天',
+            onClick(picker) {
+              const date = new Date()
+              date.setTime(date.getTime() - 3600 * 1000 * 24)
+              picker.$emit('pick', date)
+            }
+          },
+          {
+            text: '一周前',
+            onClick(picker) {
+              const date = new Date()
+              date.setTime(date.getTime() - 3600 * 1000 * 24 * 7)
+              picker.$emit('pick', date)
+            }
           }
-        }, {
-          text: '昨天',
-          onClick(picker) {
-            const date = new Date()
-            date.setTime(date.getTime() - 3600 * 1000 * 24)
-            picker.$emit('pick', date)
-          }
-        }, {
-          text: '一周前',
-          onClick(picker) {
-            const date = new Date()
-            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7)
-            picker.$emit('pick', date)
-          }
-        }]
+        ]
       },
       datePickerValue: '',
       mask: true,
       date: dateFormat(new Date(), 'yyyy-MM-dd')
     }
   },
-  computed: {
-
-  },
-  mounted() {
-  },
+  computed: {},
+  mounted() {},
   methods: {
     handlePlay() {
       this.play = !this.play

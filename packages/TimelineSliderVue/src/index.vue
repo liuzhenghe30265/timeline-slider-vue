@@ -1,20 +1,32 @@
 <template>
   <div class="timeline-container">
-    <MainView v-model="value" class="main-view" :vertical="vertical" :mask="mask" :max="max" :date-point="datePoint"
-      :height="height" @change="handleChange" @input="handleInput">
-      <div slot="sliderContent" class="slider-content">
-        <slot name="sliderContent" :data="dateValue" :value="value" />
+    <MainView
+      v-model="value"
+      class="main-view"
+      :vertical="vertical"
+      :mask="mask"
+      :max="max"
+      :date-point="datePoint"
+      :height="height"
+      @change="handleChange"
+      @input="handleInput"
+    >
+      <div
+        slot="sliderContent"
+        class="slider-content"
+      >
+        <slot
+          name="sliderContent"
+          :data="dateValue"
+          :value="value"
+        />
       </div>
     </MainView>
   </div>
 </template>
 
 <script>
-import {
-  dateFormat,
-  createCalendarAndPosition,
-  numberOfDays
-} from './utils'
+import { dateFormat, createCalendarAndPosition, numberOfDays } from './utils'
 import MainView from './MainView.vue'
 export default {
   name: 'TimelineSliderVue',
@@ -61,6 +73,15 @@ export default {
       type: Boolean,
       default: true
     },
+    play: {
+      type: Boolean,
+      default: false
+    },
+    // 播放速度
+    playSpeed: {
+      type: Number,
+      default: 1000
+    },
     // 传递过来的日期
     date: {
       type: String,
@@ -69,16 +90,23 @@ export default {
   },
   data() {
     return {
+      playTimer: null,
       lock: false, // 滑块只能在指定日期下跳转
       dateValue: '', // 通过 index 计算的日期
       datePoint: [], // 一年中所有日期及所在的位置
+      max: 365,
       value: 0
     }
   },
-  computed: {
-
-  },
+  computed: {},
   watch: {
+    play(val) {
+      if (val) {
+        this.playTimerFun()
+      } else {
+        this.clearPlayTimerFun()
+      }
+    },
     initValue: {
       immediate: true,
       handler(value) {
@@ -104,6 +132,7 @@ export default {
       }
     },
     lockDate(list) {
+      this.clearPlayTimerFun()
       if (this.vertical) return
       if (list && list.length > 0) {
         this.lock = true
@@ -115,10 +144,12 @@ export default {
       }
     },
     markDate(list) {
+      this.clearPlayTimerFun()
       if (this.vertical) return
       this.setCalendarAndPosition(this.getYearMonthDay(this.date).year, list)
     },
     date(val) {
+      this.clearPlayTimerFun()
       if (this.vertical) return
       this.sliderTo(val)
     }
@@ -133,6 +164,21 @@ export default {
   },
 
   methods: {
+    clearPlayTimerFun() {
+      if (this.playTimer) {
+        clearInterval(this.playTimer)
+      }
+    },
+    playTimerFun() {
+      this.clearPlayTimerFun()
+      this.playTimer = setInterval(() => {
+        this.value += 1
+        if (this.value > this.max) {
+          this.clearPlayTimerFun()
+          return
+        }
+      }, this.playSpeed)
+    },
     // 获取年月日
     getYearMonthDay(date) {
       // 兼容 ios 设备（ios 不支持短横线格式的日期）
