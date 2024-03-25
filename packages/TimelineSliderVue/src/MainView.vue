@@ -1,20 +1,57 @@
 <template>
-  <div class="timeline-slider" role="slider" :aria-valuemin="min" :aria-valuemax="max" :aria-disabled="sliderDisabled"
-    :class="{ 'is-vertical': vertical, move: dragStatus && mask }">
-    <div ref="slider" class="timeline-runway" :class="{ 'disabled': sliderDisabled }" :style="runwayStyle"
-      @click="onSliderClick">
-      <div class="timeline-slider-bar" :style="barStyle" />
-      <SliderButton ref="button1" v-model="firstValue" :tooltip-class="tooltipClass" :vertical="vertical">
+  <div
+    class="timeline-slider"
+    role="slider"
+    :aria-valuemin="min"
+    :aria-valuemax="max"
+    :aria-disabled="sliderDisabled"
+    :class="{ 'is-vertical': vertical, move: dragStatus && mask }"
+  >
+    <div
+      ref="slider"
+      class="timeline-runway"
+      :class="{ 'disabled': sliderDisabled }"
+      :style="runwayStyle"
+      @click="onSliderClick"
+    >
+      <div
+        class="timeline-slider-bar"
+        :style="barStyle"
+      />
+      <SliderButton
+        ref="button1"
+        v-model="firstValue"
+        :tooltip-class="tooltipClass"
+        :vertical="vertical"
+      >
         <div slot="sliderContent">
           <slot name="sliderContent" />
         </div>
       </SliderButton>
-      <div class="timeline-days" v-if="!vertical">
-        <div v-for="(item, index) of datePoint" :key="index" class="day-item" :style="{ left: item.position + '%' }">
+      <div
+        class="timeline-days"
+        v-if="!vertical"
+      >
+        <div
+          v-for="(item, index) of datePoint"
+          :key="index"
+          class="day-item"
+          :style="{ left: item.position + '%' }"
+        >
           <div class="label-text">
-            <span v-if="item.label" :title="item.date" class="month-value" @click.stop="handleTimeItemClick(item)">{{
+            <span
+              v-if="item.label"
+              :title="item.date"
+              class="month-value"
+              @click.stop="handleTimeItemClick(item)"
+            >{{
               item.label }}</span>
-            <span v-if="item.mark" :title="item.date" class="mark-value" @click.stop="handleTimeItemClick(item)">{{
+            <span
+              v-if="item.mark"
+              :title="item.date"
+              class="mark-value"
+              @click.stop="handleTimeItemClick(item)"
+            >{{
               item.label }}</span>
           </div>
         </div>
@@ -145,18 +182,23 @@ export default {
         return []
       }
       const stopCount = (this.max - this.min) / this.step
-      const stepWidth = 100 * this.step / (this.max - this.min)
+      const stepWidth = (100 * this.step) / (this.max - this.min)
       const result = []
       for (let i = 1; i < stopCount; i++) {
         result.push(i * stepWidth)
       }
       if (this.range) {
         return result.filter(step => {
-          return step < 100 * (this.minValue - this.min) / (this.max - this.min) ||
-            step > 100 * (this.maxValue - this.min) / (this.max - this.min)
+          return (
+            step < (100 * (this.minValue - this.min)) / (this.max - this.min) ||
+            step > (100 * (this.maxValue - this.min)) / (this.max - this.min)
+          )
         })
       } else {
-        return result.filter(step => step > 100 * (this.firstValue - this.min) / (this.max - this.min))
+        return result.filter(
+          step =>
+            step > (100 * (this.firstValue - this.min)) / (this.max - this.min)
+        )
       }
     },
 
@@ -164,7 +206,6 @@ export default {
       if (!this.datePoint) {
         return []
       }
-      console.log('........', this.datePoint)
       return []
     },
 
@@ -174,12 +215,13 @@ export default {
       }
 
       const marksKeys = Object.keys(this.marks)
-      return marksKeys.map(parseFloat)
+      return marksKeys
+        .map(parseFloat)
         .sort((a, b) => a - b)
         .filter(point => point <= this.max && point >= this.min)
         .map(point => ({
           point,
-          position: (point - this.min) * 100 / (this.max - this.min),
+          position: ((point - this.min) * 100) / (this.max - this.min),
           mark: this.marks[point]
         }))
     },
@@ -194,13 +236,13 @@ export default {
 
     barSize() {
       return this.range
-        ? `${100 * (this.maxValue - this.minValue) / (this.max - this.min)}%`
-        : `${100 * (this.firstValue - this.min) / (this.max - this.min)}%`
+        ? `${(100 * (this.maxValue - this.minValue)) / (this.max - this.min)}%`
+        : `${(100 * (this.firstValue - this.min)) / (this.max - this.min)}%`
     },
 
     barStart() {
       return this.range
-        ? `${100 * (this.minValue - this.min) / (this.max - this.min)}%`
+        ? `${(100 * (this.minValue - this.min)) / (this.max - this.min)}%`
         : '0%'
     },
 
@@ -219,12 +261,13 @@ export default {
     barStyle() {
       return this.vertical
         ? {
-          height: this.barSize,
-          bottom: this.barStart
-        } : {
-          width: this.barSize,
-          left: this.barStart
-        }
+            height: this.barSize,
+            bottom: this.barStart
+          }
+        : {
+            width: this.barSize,
+            left: this.barStart
+          }
     },
 
     sliderDisabled() {
@@ -234,10 +277,12 @@ export default {
 
   watch: {
     value(val, oldVal) {
-      if (this.dragging ||
-        Array.isArray(val) &&
-        Array.isArray(oldVal) &&
-        val.every((item, index) => item === oldVal[index])) {
+      if (
+        this.dragging ||
+        (Array.isArray(val) &&
+          Array.isArray(oldVal) &&
+          val.every((item, index) => item === oldVal[index]))
+      ) {
         return
       }
       this.setValues()
@@ -296,7 +341,10 @@ export default {
     this.$el.setAttribute('aria-valuetext', valuetext)
 
     // label screen reader
-    this.$el.setAttribute('aria-label', this.label ? this.label : `slider between ${this.min} and ${this.max}`)
+    this.$el.setAttribute(
+      'aria-label',
+      this.label ? this.label : `slider between ${this.min} and ${this.max}`
+    )
 
     this.resetSize()
     window.addEventListener('resize', this.resetSize)
@@ -313,15 +361,18 @@ export default {
     },
     valueChanged() {
       if (this.range) {
-        return ![this.minValue, this.maxValue]
-          .every((item, index) => item === this.oldValue[index])
+        return ![this.minValue, this.maxValue].every(
+          (item, index) => item === this.oldValue[index]
+        )
       } else {
         return this.value !== this.oldValue
       }
     },
     setValues() {
       if (this.min > this.max) {
-        console.error('[Element Error][Slider]min should not be greater than max.')
+        console.error(
+          '[Element Error][Slider]min should not be greater than max.'
+        )
         return
       }
       const val = this.value
@@ -338,7 +389,10 @@ export default {
           this.firstValue = val[0]
           this.secondValue = val[1]
           if (this.valueChanged()) {
-            this.dispatch('ElFormItem', 'el.form.change', [this.minValue, this.maxValue])
+            this.dispatch('ElFormItem', 'el.form.change', [
+              this.minValue,
+              this.maxValue
+            ])
             this.oldValue = val.slice()
           }
         }
@@ -358,13 +412,16 @@ export default {
     },
 
     setPosition(percent) {
-      const targetValue = this.min + percent * (this.max - this.min) / 100
+      const targetValue = this.min + (percent * (this.max - this.min)) / 100
       if (!this.range) {
         this.$refs.button1.setPosition(percent)
         return
       }
       let button
-      if (Math.abs(this.minValue - targetValue) < Math.abs(this.maxValue - targetValue)) {
+      if (
+        Math.abs(this.minValue - targetValue) <
+        Math.abs(this.maxValue - targetValue)
+      ) {
         button = this.firstValue < this.secondValue ? 'button1' : 'button2'
       } else {
         button = this.firstValue > this.secondValue ? 'button1' : 'button2'
@@ -376,29 +433,40 @@ export default {
       if (this.sliderDisabled || this.dragging) return
       this.resetSize()
       if (this.vertical) {
-        const sliderOffsetBottom = this.$refs.slider.getBoundingClientRect().bottom
-        this.setPosition((sliderOffsetBottom - event.clientY) / this.sliderSize * 100)
+        const sliderOffsetBottom =
+          this.$refs.slider.getBoundingClientRect().bottom
+        this.setPosition(
+          ((sliderOffsetBottom - event.clientY) / this.sliderSize) * 100
+        )
       } else {
         const sliderOffsetLeft = this.$refs.slider.getBoundingClientRect().left
-        this.setPosition((event.clientX - sliderOffsetLeft) / this.sliderSize * 100)
+        this.setPosition(
+          ((event.clientX - sliderOffsetLeft) / this.sliderSize) * 100
+        )
       }
       this.emitChange()
     },
 
     resetSize() {
       if (this.$refs.slider) {
-        this.sliderSize = this.$refs.slider[`client${this.vertical ? 'Height' : 'Width'}`]
+        this.sliderSize =
+          this.$refs.slider[`client${this.vertical ? 'Height' : 'Width'}`]
       }
     },
 
     emitChange() {
       this.$nextTick(() => {
-        this.$emit('change', this.range ? [this.minValue, this.maxValue] : this.value)
+        this.$emit(
+          'change',
+          this.range ? [this.minValue, this.maxValue] : this.value
+        )
       })
     },
 
     getStopStyle(position) {
-      return this.vertical ? { 'bottom': position + '%' } : { 'left': position + '%' }
+      return this.vertical
+        ? { bottom: position + '%' }
+        : { left: position + '%' }
     }
   }
 }
@@ -521,7 +589,7 @@ export default {
       .timeline-runway {
         display: block;
         width: 10px;
-        background-color: #E4E7ED;
+        background-color: #e4e7ed;
 
         .timeline-slider-bar {
           position: absolute;

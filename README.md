@@ -8,18 +8,13 @@ timeline-slider-vue
 
 [Github](https://github.com/liuzhenghe30265/timeline-slider-vue.git)
 
-## 环境
-
--   node V12.20.0
--   npm 6.14.8
-
-## 📦 Install
+## Install
 
 ```bash
 npm install --save timeline-slider-vue
 ```
 
-## 🔧 Usage
+## Usage
 
 main.js
 

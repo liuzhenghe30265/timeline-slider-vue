@@ -1,8 +1,11 @@
 {
   "name": "timeline-slider-vue",
-  "version": "1.0.9",
+  "version": "1.1.0",
   "private": false,
   "main": "lib/timeline-slider-vue.common.js",
+  "files": [
+    "lib"
+  ],
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",

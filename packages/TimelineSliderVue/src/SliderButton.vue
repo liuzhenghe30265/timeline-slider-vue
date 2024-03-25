@@ -1,21 +1,30 @@
 <template>
-  <div ref="button" class="slider-button-wrapper" :class="{ 'hover': hovering, 'dragging': dragging }"
-    :style="wrapperStyle" tabindex="0" @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave"
-    @mousedown="onButtonDown" @touchstart="onButtonDown" @focus="handleMouseEnter" @blur="handleMouseLeave"
-    @keydown.left="onLeftKeyDown" @keydown.right="onRightKeyDown" @keydown.down.prevent="onLeftKeyDown"
-    @keydown.up.prevent="onRightKeyDown">
+  <div
+    ref="button"
+    class="slider-button-wrapper"
+    :class="{ 'hover': hovering, 'dragging': dragging }"
+    :style="wrapperStyle"
+    tabindex="0"
+    @mouseenter="handleMouseEnter"
+    @mouseleave="handleMouseLeave"
+    @mousedown="onButtonDown"
+    @touchstart="onButtonDown"
+    @focus="handleMouseEnter"
+    @blur="handleMouseLeave"
+    @keydown.left="onLeftKeyDown"
+    @keydown.right="onRightKeyDown"
+    @keydown.down.prevent="onLeftKeyDown"
+    @keydown.up.prevent="onRightKeyDown"
+  >
     <slot name="sliderContent" />
   </div>
 </template>
 
 <script>
-
 export default {
-  name: 'ElSliderButton',
+  name: 'SliderButton',
 
-  components: {
-
-  },
+  components: {},
 
   props: {
     value: {
@@ -73,7 +82,7 @@ export default {
     },
 
     currentPosition() {
-      return `${(this.value - this.min) / (this.max - this.min) * 100}%`
+      return `${((this.value - this.min) / (this.max - this.min)) * 100}%`
     },
 
     enableFormat() {
@@ -81,11 +90,16 @@ export default {
     },
 
     formatValue() {
-      return this.enableFormat && this.$parent.formatTooltip(this.value) || this.value
+      return (
+        (this.enableFormat && this.$parent.formatTooltip(this.value)) ||
+        this.value
+      )
     },
 
     wrapperStyle() {
-      return this.vertical ? { bottom: this.currentPosition } : { left: this.currentPosition }
+      return this.vertical
+        ? { bottom: this.currentPosition }
+        : { left: this.currentPosition }
     }
   },
 
@@ -126,13 +140,17 @@ export default {
     },
     onLeftKeyDown() {
       if (this.disabled) return
-      this.newPosition = parseFloat(this.currentPosition) - this.step / (this.max - this.min) * 100
+      this.newPosition =
+        parseFloat(this.currentPosition) -
+        (this.step / (this.max - this.min)) * 100
       this.setPosition(this.newPosition)
       this.$parent.emitChange()
     },
     onRightKeyDown() {
       if (this.disabled) return
-      this.newPosition = parseFloat(this.currentPosition) + this.step / (this.max - this.min) * 100
+      this.newPosition =
+        parseFloat(this.currentPosition) +
+        (this.step / (this.max - this.min)) * 100
       this.setPosition(this.newPosition)
       this.$parent.emitChange()
     },
@@ -165,10 +183,10 @@ export default {
         }
         if (this.vertical) {
           this.currentY = event.clientY
-          diff = (this.startY - this.currentY) / this.$parent.sliderSize * 100
+          diff = ((this.startY - this.currentY) / this.$parent.sliderSize) * 100
         } else {
           this.currentX = event.clientX
-          diff = (this.currentX - this.startX) / this.$parent.sliderSize * 100
+          diff = ((this.currentX - this.startX) / this.$parent.sliderSize) * 100
         }
         this.newPosition = this.startPosition + diff
         this.setPosition(this.newPosition)
@@ -207,7 +225,8 @@ export default {
       }
       const lengthPerStep = 100 / ((this.max - this.min) / this.step)
       const steps = Math.round(newPosition / lengthPerStep)
-      let value = steps * lengthPerStep * (this.max - this.min) * 0.01 + this.min
+      let value =
+        steps * lengthPerStep * (this.max - this.min) * 0.01 + this.min
       value = parseFloat(value.toFixed(this.precision))
       this.$emit('input', value)
       this.$nextTick(() => {
